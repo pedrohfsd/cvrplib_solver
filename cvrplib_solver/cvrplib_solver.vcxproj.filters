@@ -13,15 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\solver">
+      <UniqueIdentifier>{8f02d12d-4513-4823-842e-b4e8c6f03f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\model">
+      <UniqueIdentifier>{f030116e-382d-4737-a5fb-385fcb4e8e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\model">
+      <UniqueIdentifier>{9e7a89d8-3fcf-4db7-85fa-0b0152b064af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\solver">
+      <UniqueIdentifier>{0eebd575-23ee-4c43-8c2a-e2f0119f63e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\solver\lysgaard">
+      <UniqueIdentifier>{ff0bd65a-d707-4b6a-96fd-cff8c5ab34e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\solver\lysgaard">
+      <UniqueIdentifier>{53ac4ebc-1b4d-4b2a-9486-8fdf9005f628}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Edge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileParser.cpp">
@@ -30,31 +42,37 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Data.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Edge.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
     <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\model</Filter>
     </ClCompile>
     <ClCompile Include="TwoIndex.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\solver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Edge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FileParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Data.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Edge.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\model</Filter>
     </ClInclude>
     <ClInclude Include="TwoIndex.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\solver</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

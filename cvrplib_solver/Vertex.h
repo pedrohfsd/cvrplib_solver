@@ -2,15 +2,14 @@
 #define VERTEX_H_
 
 #include "Edge.h"
+#include <vector>
 
 class Vertex {
 public:
 	std::vector<Edge> edges;
 	int demand;
-	int edgeCount;
+	double coordinate[2];
 	Vertex();
-	Vertex(int edgeCount);
-	void init(int edgeCount);
 };
 
 #endif  // VERTEX_H_

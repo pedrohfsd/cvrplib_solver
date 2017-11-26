@@ -12,8 +12,7 @@ void FileParser::parse(const string& filepath) {
 	if (!infile.is_open()) throw exception(("Filepath " + filepath + " does not exists").c_str());
 	unordered_map<string, string> spec;
 	readSpecification(infile, spec);
-	int dimension = stoi(spec["DIMENSION"]);
-	data.init(dimension);
+	data.vertices.resize(stoi(spec["DIMENSION"]));
 
 	function<int(double[], double[])> dist = NULL;
 	if (spec["EDGE_WEIGHT_TYPE"] == "EUC_2D") dist = [this](double f[2], double t[2]) {return euclidianDistance2D(f, t); };
@@ -23,20 +22,12 @@ void FileParser::parse(const string& filepath) {
 	else throw exception("Unsupported distance function");
 
 	if (spec["NODE_COORD_SECTION"] == "true") {
-		vector<vector<double>> nodes;
-		for (int i = 0; i < data.vertices.size(); i++) nodes.push_back(vector<double>(dimension));
-		readNodes2D(infile, nodes);
-		buildDataFromNodes(nodes, dist);
+		readNodes2D(infile);
+		buildDataFromCoord(dist);
 	} else if (spec["EDGE_WEIGHT_FORMAT"] == "LOWER_DIAG_ROW") {
-		vector<vector<double>> edges;
-		for (int i = 0; i < data.vertices.size(); i++) edges.push_back(vector<double>(dimension));
-		readLowDiagEdges2D(infile, edges, true);
-		buildDataFromEdges(edges);
+		readLowDiagEdges2D(infile, true);
 	} else if (spec["EDGE_WEIGHT_FORMAT"] == "LOWER_ROW") {
-		vector<vector<double>> edges;
-		for (int i = 0; i < data.vertices.size(); i++) edges.push_back(vector<double>(dimension));
-		readLowDiagEdges2D(infile, edges, false);
-		buildDataFromEdges(edges);
+		readLowDiagEdges2D(infile, false);
 	}else throw exception("Unsupported edge data format");
 	
 	readDemands(infile);
@@ -53,26 +44,19 @@ int FileParser::attDistance(double node1[2], double node2[2]) {
 	return tij;
 };
 
-void FileParser::buildDataFromNodes(vector<vector<double>>& nodes, function<int(double[], double[])> dist) {
-	int n = (int)data.vertices.size();
-	for (int i = 0; i < n; i++) {
-		Vertex& vertex = data.vertices[i];
-		for (int j = 0; j < n; j++) {
-			double from[2] = { nodes[i][0], nodes[i][1] };
-			double to[2] = { nodes[j][0], nodes[j][1] };
-			vertex.edges[j].cost = dist(from, to);
-			vertex.edges[j].id = Data::indexToId(n, i, j);
-		}
-	}
-};
-
-void FileParser::buildDataFromEdges(vector<vector<double>>& edges) {
-	int n = (int)data.vertices.size();
-	for (int i = 0; i < n; i++) {
-		Vertex& vertex = data.vertices[i];
-		for (int j = 0; j < n; j++) {
-			vertex.edges[j].cost = (int)edges[i][j];
-			vertex.edges[j].id = Data::indexToId(n, i, j);
+void FileParser::buildDataFromCoord(function<int(double[], double[])> dist) {
+	int pos = 0;
+	for (int i = 0; i < data.vertices.size(); i++) {
+		Vertex& from = data.vertices[i];
+		for (int j = 0; j < i; j++) {
+			Vertex& to = data.vertices[j];
+			Edge edge;
+			edge.id = pos++;
+			edge.from = i;
+			edge.to = j;
+			edge.cost = dist(from.coordinate, to.coordinate);
+			data.edges.push_back(edge);
+			from.edges.push_back(edge);
 		}
 	}
 };
@@ -121,32 +105,37 @@ void FileParser::readDemands(ifstream& infile) {
 	string line;
 	infile >> line;
 	if (line != "DEMAND_SECTION") throw exception("Error reading demands data");
-	for (int i = 0; i < data.dimension; i++) {
+	for (int i = 0; i < data.vertices.size(); i++) {
 		int node;
 		infile >> node;
 		infile >> data.vertices[node-1].demand;
 	}
 }
 
-void FileParser::readLowDiagEdges2D(ifstream& infile, vector<vector<double>>& edges, bool includeDiagonal) {
+void FileParser::readLowDiagEdges2D(ifstream& infile, bool includeDiagonal) {
 	int pos = 0;
-	for (int i = 0; i < edges.size(); i++) {
-		for (int j = 0; includeDiagonal ? j <= pos : j < pos; j++) {
-			infile >> edges[i][j];
-			edges[j][i] = edges[i][j];
+	for (int i = 0; i < data.vertices.size(); i++) {
+		Vertex& from = data.vertices[i];
+		for (int j = 0; includeDiagonal ? j <= i : j < i; j++) {
+			Edge edge;
+			edge.id = pos++;
+			edge.from = i;
+			edge.to = j;
+			infile >> edge.cost;
+			data.edges.push_back(edge);
+			from.edges.push_back(edge);
 		}
-		pos++;
 	}
 };
 
-void FileParser::readNodes2D(ifstream& infile, vector<vector<double>>& nodes) {
+void FileParser::readNodes2D(ifstream& infile) {
 	string line;
 	while (getline(infile, line)) {
 		istringstream iss(line);
-		int id; double x, y;
-		if (!(iss >> id >> x >> y)) break;
-		nodes[id - 1][0] = x;
-		nodes[id - 1][1] = y;
+		int v; double x, y;
+		if (!(iss >> v >> x >> y)) break;
+		data.vertices[v - 1].coordinate[0] = x;
+		data.vertices[v - 1].coordinate[1] = y;
 	}
 };
 

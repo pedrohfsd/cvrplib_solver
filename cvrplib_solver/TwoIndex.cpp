@@ -18,12 +18,13 @@ void TwoIndex::run(Data& data) {
 	addDecisionVariables(model, x, cons, data);
 	addObjectiveFunction(model, x, cons, data);
 	addDepotConstraints(model, x, cons, data);
-	addClientConstraints(model, x, cons, data);
+	addCustomerConstraints(model, x, cons, data);
 
 	model.add(cons);
 	IloCplex cplex(model);
 	cplex.exportModel((PROBLEM + ".lp").c_str());
 	cplex.setParam(IloCplex::Threads, 1);
+	//cplex.use();
 
 	if (!cplex.solve()) throw exception("Failed to optimize IP");
 
@@ -32,50 +33,40 @@ void TwoIndex::run(Data& data) {
 
 void TwoIndex::addDecisionVariables(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
 	IloEnv env = model.getEnv();
-	for (int i = 0; i < data.dimension; i++) {
-		for (int j = 0; j < data.dimension; j++) {
-			if (i == j) x.add(IloIntVar(env, 0, 0, ("x_" + to_string(i) + "_" + to_string(j)).c_str()));
-			else x.add(IloBoolVar(env, ("x_"+ to_string(i) +"_"+ to_string(j)).c_str()));
-		}
+	for (int i = 0; i < data.edges.size(); i++) {
+		if (data.edges[i].to == data.depot) x.add(IloIntVar(env, 0, 2, ("x_" + to_string(data.edges[i].from) + "_" + to_string(data.edges[i].to)).c_str()));
+		else x.add(IloBoolVar(env, ("x_" + to_string(data.edges[i].from) + "_" + to_string(data.edges[i].to)).c_str()));
 	}
 };
 
 void TwoIndex::addDepotConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
 	IloExpr expr(model.getEnv());
-	for (int i = 0; i < data.dimension; i++) {
-		expr += x[data.vertices[0].edges[i].id];
-		expr += x[data.vertices[i].edges[0].id];
+	for (int e = 0; e < data.vertices[data.depot].edges.size(); e++) {
+		expr += x[data.vertices[data.depot].edges[e].id];
 	}
-	con.add(IloRange(expr == 2*4));
+	con.add(IloRange(expr == 2*data.vehicles));
 	expr.end();
 };
 
-void TwoIndex::addClientConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
+void TwoIndex::addCustomerConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
 	IloEnv env = model.getEnv();
-	size_t n = data.vertices.size();
-	for (int i = 1; i < n; i++) {
+	for (int v = 0; v < data.vertices.size(); v++) {
+		if (v == data.depot) continue;
 		IloExpr expr(env);
-		for (int j = 0; j < n; j++)
-			expr += x[data.vertices[i].edges[j].id];
-		con.add(IloRange(expr == 1));
-		expr.end();
-
-		expr = IloExpr(env);
-		for (int j = 0; j < n; j++)
-			expr += x[data.vertices[j].edges[i].id];
-		con.add(IloRange(expr == 1));
+		for (int e = 0; e < data.vertices[v].edges.size(); e++) {
+			expr += x[data.vertices[v].edges[e].id];
+		}
+		con.add(IloRange(expr == 2));
 		expr.end();
 	}
 };
 
-void TwoIndex::addObjectiveFunction(IloModel model, IloNumVarArray var, IloRangeArray con, Data& data) {
+void TwoIndex::addObjectiveFunction(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
 	IloEnv env = model.getEnv();
 	IloExpr expr(env);
-	for (int i = 0; i < data.dimension; i++) {
-		for (int j = 0; j < data.dimension; j++) {
-			Edge edge = data.vertices[i].edges[j];
-			expr += edge.cost * var[edge.id];
-		}
+	for (int e = 0; e < data.edges.size(); e++) {
+		Edge edge = data.edges[e];
+		expr += edge.cost * x[edge.id];
 	}
 	model.add(IloMinimize(env, expr));
 	expr.end();

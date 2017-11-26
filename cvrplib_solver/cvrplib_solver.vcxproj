@@ -38,6 +38,7 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\props\CplexDebug.props" />
+    <Import Project="..\props\CVRPSep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -75,18 +76,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractCutSeparation.cpp" />
+    <ClCompile Include="CapacityCut.cpp" />
+    <ClCompile Include="Cut.cpp" />
     <ClCompile Include="Data.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="FileParser.cpp" />
+    <ClCompile Include="LysgaardCapCutSeparation.cpp" />
+    <ClCompile Include="LysgaardCutSeparation.cpp" />
+    <ClCompile Include="LysgaardSeparationCallback.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TwoIndex.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractCutSeparation.h" />
+    <ClInclude Include="CapacityCut.h" />
+    <ClInclude Include="Cut.h" />
     <ClInclude Include="Data.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="FileParser.h" />
+    <ClInclude Include="LysgaardCapCutSeparation.h" />
+    <ClInclude Include="LysgaardCutSeparation.h" />
+    <ClInclude Include="LysgaardSeparationCallback.h" />
     <ClInclude Include="TwoIndex.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vertex.h" />

@@ -15,7 +15,7 @@ private:
 	void addDecisionVariables(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data);
 	void addDepotConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data);
 	void addObjectiveFunction(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data);
-	void addClientConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data);
+	void addCustomerConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data);
 	void print(IloCplex, IloNumVarArray, IloRangeArray);
 };
 

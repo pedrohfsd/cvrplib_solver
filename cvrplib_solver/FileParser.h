@@ -18,14 +18,13 @@ private:
 	Data& data;
 
 	int attDistance(double node1[2], double node2[2]);
-	void buildDataFromNodes(std::vector<std::vector<double>>& nodes, std::function<int(double[], double[])> dist);
-	void buildDataFromEdges(std::vector<std::vector<double>>& edges);
+	void buildDataFromCoord(std::function<int(double[], double[])> dist);
 	int euclidianDistance2D(double node1[2], double node2[2]);
 	int geoDistance(double node1[2], double node2[2]);
 	int nint(double x);
 	void readDemands(std::ifstream& infile);
-	void readLowDiagEdges2D(std::ifstream& infile, std::vector<std::vector<double>>& edges, bool includeDiagonal);
-	void readNodes2D(std::ifstream& infile, std::vector<std::vector<double>>& nodes);
+	void readLowDiagEdges2D(std::ifstream& infile, bool includeDiagonal);
+	void readNodes2D(std::ifstream& infile);
 	void readSpecification(std::ifstream& infile, std::unordered_map<std::string, std::string>& spec);
 };
 

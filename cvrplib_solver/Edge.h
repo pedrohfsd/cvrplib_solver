@@ -5,10 +5,9 @@ class Edge {
 public:
 	int id;
 	int cost;
+	int from;
+	int to;
 	Edge();
-	Edge(int id, int cost);
-private:
-	void init(int id, int cost);
 };
 
 #endif  // EDGE_H_
