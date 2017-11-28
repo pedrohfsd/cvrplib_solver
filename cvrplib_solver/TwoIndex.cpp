@@ -1,4 +1,5 @@
 #include "TwoIndex.h"
+#include "LysgaardSeparationCallback.h"
 
 #include <ilcplex/ilocplex.h>
 #include <string>
@@ -12,8 +13,9 @@ TwoIndex::TwoIndex() {}
 void TwoIndex::run(Data& data) {
 	IloEnv   env;
 	IloModel model(env, PROBLEM.c_str());
-	IloNumVarArray x(env);
+	IloIntVarArray x(env);
 	IloRangeArray cons(env);
+	LysgaardSeparationCallback callback(env, x, data);
 
 	addDecisionVariables(model, x, cons, data);
 	addObjectiveFunction(model, x, cons, data);
@@ -24,14 +26,14 @@ void TwoIndex::run(Data& data) {
 	IloCplex cplex(model);
 	cplex.exportModel((PROBLEM + ".lp").c_str());
 	cplex.setParam(IloCplex::Threads, 1);
-	//cplex.use();
+	cplex.use(&callback);
 
 	if (!cplex.solve()) throw exception("Failed to optimize IP");
 
 	print(cplex, x, cons);
 }
 
-void TwoIndex::addDecisionVariables(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
+void TwoIndex::addDecisionVariables(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data) {
 	IloEnv env = model.getEnv();
 	for (int i = 0; i < data.edges.size(); i++) {
 		if (data.edges[i].to == data.depot) x.add(IloIntVar(env, 0, 2, ("x_" + to_string(data.edges[i].from) + "_" + to_string(data.edges[i].to)).c_str()));
@@ -39,7 +41,7 @@ void TwoIndex::addDecisionVariables(IloModel model, IloNumVarArray x, IloRangeAr
 	}
 };
 
-void TwoIndex::addDepotConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
+void TwoIndex::addDepotConstraints(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data) {
 	IloExpr expr(model.getEnv());
 	for (int e = 0; e < data.vertices[data.depot].edges.size(); e++) {
 		expr += x[data.vertices[data.depot].edges[e].id];
@@ -48,7 +50,7 @@ void TwoIndex::addDepotConstraints(IloModel model, IloNumVarArray x, IloRangeArr
 	expr.end();
 };
 
-void TwoIndex::addCustomerConstraints(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
+void TwoIndex::addCustomerConstraints(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data) {
 	IloEnv env = model.getEnv();
 	for (int v = 0; v < data.vertices.size(); v++) {
 		if (v == data.depot) continue;
@@ -61,7 +63,7 @@ void TwoIndex::addCustomerConstraints(IloModel model, IloNumVarArray x, IloRange
 	}
 };
 
-void TwoIndex::addObjectiveFunction(IloModel model, IloNumVarArray x, IloRangeArray con, Data& data) {
+void TwoIndex::addObjectiveFunction(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data) {
 	IloEnv env = model.getEnv();
 	IloExpr expr(env);
 	for (int e = 0; e < data.edges.size(); e++) {
@@ -72,7 +74,7 @@ void TwoIndex::addObjectiveFunction(IloModel model, IloNumVarArray x, IloRangeAr
 	expr.end();
 };
 
-void TwoIndex::print(IloCplex cplex, IloNumVarArray x, IloRangeArray cons) {
+void TwoIndex::print(IloCplex cplex, IloIntVarArray x, IloRangeArray cons) {
 	IloEnv env = cplex.getEnv();
 	IloNumArray vals(env);
 

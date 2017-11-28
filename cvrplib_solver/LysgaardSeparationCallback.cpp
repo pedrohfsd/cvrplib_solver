@@ -9,7 +9,7 @@
 
 using namespace std;
 
-LysgaardSeparationCallback::LysgaardSeparationCallback(IloEnv env, IloIntVarArray x) : IloCplex::LazyConstraintCallbackI(env), x(x) {}
+LysgaardSeparationCallback::LysgaardSeparationCallback(IloEnv env, IloIntVarArray x, Data& data):data(data), IloCplex::LazyConstraintCallbackI(env), x(x) {}
 
 void LysgaardSeparationCallback::main()
 {
@@ -20,10 +20,11 @@ void LysgaardSeparationCallback::main()
 	for (int e = 0; e < vals.getSize(); e++)
 		solution.push_back(vals[e]);
 
-	LysgaardCapCutSeparation sep;
+	LysgaardCapCutSeparation sep(data);
 	if (sep.run(solution))
 	{
-		Cut& cut = sep.getCut();
+		Cut cut;
+		//Cut& cut = sep.getCut();
 
 		IloExpr expr(getEnv());
 		for (int e = 0; e < (int)cut.edges.size(); e++)

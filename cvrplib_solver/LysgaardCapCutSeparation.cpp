@@ -15,6 +15,9 @@
 
 using namespace std;
 
+LysgaardCapCutSeparation::LysgaardCapCutSeparation(Data& data):LysgaardCutSeparation(data) {
+}
+
 bool LysgaardCapCutSeparation::run(const vector<double>& solution)
 {
 	init(solution); // builds solution adjacency matrix, tail, head and x vectors.
@@ -49,27 +52,27 @@ bool LysgaardCapCutSeparation::run(const vector<double>& solution)
 
 			cut.ks = (int)ceil(demand / (double)data.vehicle_capacity - 1e-7); // minimum number of vehicles
 
-			if (S <= (int)data.vertices.size() / 2) // if small use the complementary cut
+			if (S <= (int)data.vertices.size() / 2) // is sufficently small, use this cut
 			{
 				cuts.push_back(Cut(S - cut.ks, Cut::lower_equal));
-				addCutEdges(cuts.back(), cut.vertices_map, inner_edge, 1.0);
+				//addCutEdges(cuts.back(), cut.vertices_map, inner_edge, 1.0);
 			}
-			else
+			else // too big, use the complementary cut
 			{
 				cuts.push_back(Cut((int)data.vertices.size() - 1 - S - cut.ks, Cut::lower_equal));
-				addCutEdges(cuts.back(), cut.vertices_map, outer_edge, 1.0);
+				/*addCutEdges(cuts.back(), cut.vertices_map, outer_edge, 1.0);
 				addCutEdges(cuts.back(), cut.vertices_map, outer_depot_edge, 0.5);
-				addCutEdges(cuts.back(), cut.vertices_map, inner_depot_edge, -0.5);
+				addCutEdges(cuts.back(), cut.vertices_map, inner_depot_edge, -0.5);*/
 			}
 
-			double violation = calculateViolation(cuts.back(), solution);
+			/*double violation = calculateViolation(cuts.back(), solution);
 			if (violation <= EPS)
 				error++;
 			else if (violation > bestViolation)
 			{
 				best = (int)cuts.size() - 1;
 				bestViolation = violation;
-			}
+			}*/
 		}
 
 		if (error > 0)

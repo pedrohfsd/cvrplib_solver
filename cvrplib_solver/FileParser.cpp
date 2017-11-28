@@ -57,6 +57,7 @@ void FileParser::buildDataFromCoord(function<int(double[], double[])> dist) {
 			edge.cost = dist(from.coordinate, to.coordinate);
 			data.edges.push_back(edge);
 			from.edges.push_back(edge);
+			to.edges.push_back(edge);
 		}
 	}
 };
@@ -117,6 +118,7 @@ void FileParser::readLowDiagEdges2D(ifstream& infile, bool includeDiagonal) {
 	for (int i = 0; i < data.vertices.size(); i++) {
 		Vertex& from = data.vertices[i];
 		for (int j = 0; includeDiagonal ? j <= i : j < i; j++) {
+			Vertex& to = data.vertices[j];
 			Edge edge;
 			edge.id = pos++;
 			edge.from = i;
@@ -124,6 +126,7 @@ void FileParser::readLowDiagEdges2D(ifstream& infile, bool includeDiagonal) {
 			infile >> edge.cost;
 			data.edges.push_back(edge);
 			from.edges.push_back(edge);
+			to.edges.push_back(edge);
 		}
 	}
 };

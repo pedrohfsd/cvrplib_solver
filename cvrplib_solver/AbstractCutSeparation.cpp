@@ -3,13 +3,13 @@
 
 using namespace std;
 
-AbstractCutSeparation::AbstractCutSeparation(){
+AbstractCutSeparation::AbstractCutSeparation(Data& data):data(data){
 }
 
-void AbstractCutSeparation::addCutEdges(Cut& cut, cut.vertices_map, outer_edge, 1.0) {
-
-}
-
-double AbstractCutSeparation::calculateViolation(Cut& cuts, const vector<double>& solution) {
-
-}
+//void AbstractCutSeparation::addCutEdges(Cut& cut, cut.vertices_map, outer_edge, 1.0) {
+//
+//}
+//
+//double AbstractCutSeparation::calculateViolation(Cut& cuts, const vector<double>& solution) {
+//
+//}

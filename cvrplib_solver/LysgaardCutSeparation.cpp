@@ -9,7 +9,7 @@
 
 using namespace std;
 
-LysgaardCutSeparation::LysgaardCutSeparation()
+LysgaardCutSeparation::LysgaardCutSeparation(Data& data):AbstractCutSeparation(data)
 {
 	CMGR_CreateCMgr(&MyCutsCMP, 10);
 	CMGR_CreateCMgr(&MyOldCutsCMP, 10);

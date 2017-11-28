@@ -8,7 +8,7 @@
 class LysgaardCutSeparation : public AbstractCutSeparation
 {
 public:
-	explicit LysgaardCutSeparation();
+	explicit LysgaardCutSeparation(Data& data);
 	virtual ~LysgaardCutSeparation();
 
 	void init(const std::vector<double>& solution);

@@ -54,6 +54,24 @@
     <ClCompile Include="TwoIndex.cpp">
       <Filter>Source Files\solver</Filter>
     </ClCompile>
+    <ClCompile Include="LysgaardSeparationCallback.cpp">
+      <Filter>Source Files\solver\lysgaard</Filter>
+    </ClCompile>
+    <ClCompile Include="LysgaardCutSeparation.cpp">
+      <Filter>Source Files\solver\lysgaard</Filter>
+    </ClCompile>
+    <ClCompile Include="LysgaardCapCutSeparation.cpp">
+      <Filter>Source Files\solver\lysgaard</Filter>
+    </ClCompile>
+    <ClCompile Include="Cut.cpp">
+      <Filter>Source Files\solver\lysgaard</Filter>
+    </ClCompile>
+    <ClCompile Include="CapacityCut.cpp">
+      <Filter>Source Files\solver\lysgaard</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractCutSeparation.cpp">
+      <Filter>Source Files\solver\lysgaard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileParser.h">
@@ -73,6 +91,24 @@
     </ClInclude>
     <ClInclude Include="TwoIndex.h">
       <Filter>Header Files\solver</Filter>
+    </ClInclude>
+    <ClInclude Include="LysgaardCapCutSeparation.h">
+      <Filter>Header Files\solver\lysgaard</Filter>
+    </ClInclude>
+    <ClInclude Include="LysgaardCutSeparation.h">
+      <Filter>Header Files\solver\lysgaard</Filter>
+    </ClInclude>
+    <ClInclude Include="LysgaardSeparationCallback.h">
+      <Filter>Header Files\solver\lysgaard</Filter>
+    </ClInclude>
+    <ClInclude Include="Cut.h">
+      <Filter>Header Files\solver\lysgaard</Filter>
+    </ClInclude>
+    <ClInclude Include="CapacityCut.h">
+      <Filter>Header Files\solver\lysgaard</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractCutSeparation.h">
+      <Filter>Header Files\solver\lysgaard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

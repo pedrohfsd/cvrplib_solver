@@ -6,10 +6,10 @@
 
 class AbstractCutSeparation {
 public:
-	AbstractCutSeparation();
+	AbstractCutSeparation(Data& data);
 	//~AbstractCutSeparation();
 public:
-	Data data;
+	Data& data;
 	int best;
 	std::vector<Cut> cuts;
 };

@@ -7,7 +7,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(CVRPSep)\lib\x86_windows_vs2013\stat_mdd;$(CPLEX_STUDIO_DIR1271)\concert\lib\x64_windows_vs2015\stat_mdd;$(CPLEX_STUDIO_DIR1271)\cplex\lib\x64_windows_vs2015\stat_mdd;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(CVRPSep)\lib\x64_windows_vs2015\stat_mdd;$(CPLEX_STUDIO_DIR1271)\concert\lib\x64_windows_vs2015\stat_mdd;$(CPLEX_STUDIO_DIR1271)\cplex\lib\x64_windows_vs2015\stat_mdd;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>CVRPSep.lib;cplex1271.lib;ilocplex.lib;concert.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
