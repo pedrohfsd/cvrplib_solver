@@ -2,7 +2,6 @@
 #include "FileParser.h"
 #include "TwoIndex.h"
 
-
 #include <iostream>
 
 using namespace std;

@@ -23,13 +23,12 @@ void LysgaardSeparationCallback::main()
 	LysgaardCapCutSeparation sep(data);
 	if (sep.run(solution))
 	{
-		Cut cut;
-		//Cut& cut = sep.getCut();
+		const auto& cut = sep.getCut();
 
 		IloExpr expr(getEnv());
-		for (int e = 0; e < (int)cut.edges.size(); e++)
-			expr += cut.edges[e].cost * x[cut.edges[e].id];
-
+		for (int e = 0; e < (int)cut.coeff.size(); e++) {
+			expr += x[cut.coeff[e].first];
+		}
 		switch (cut.sense)
 		{
 		case Cut::equal: add(IloRange(expr == cut.rhs)); break;

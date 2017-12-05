@@ -8,9 +8,6 @@ class LysgaardCapCutSeparation : public LysgaardCutSeparation
 public:
 	LysgaardCapCutSeparation(Data& data);
 	bool run(const std::vector<double>& solution);
-
-private:
-
 };
 
 #endif

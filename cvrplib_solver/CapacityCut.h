@@ -7,11 +7,9 @@ class CapacityCut : public Cut
 {
 public:
 	CapacityCut();
+	CapacityCut(double rhs, Sense sense);
 
 	int ks;
-	std::vector<int> vertices;
-
-	void build();
 };
 
 #endif //CAPACITYCUT_H

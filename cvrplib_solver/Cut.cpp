@@ -3,5 +3,5 @@
 Cut::Cut() {
 }
 
-Cut::Cut(int rhs, int sense):rhs(ks),sense(sense) {
+Cut::Cut(double rhs, Sense sense):rhs(rhs),sense(sense) {
 }

@@ -55,8 +55,10 @@
       <SDLCheck>false</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>IL_STD;_SCL_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild />
     </ClCompile>
     <Link>
       <CLRImageType />

@@ -16,7 +16,7 @@ private:
 	void addDepotConstraints(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data);
 	void addObjectiveFunction(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data);
 	void addCustomerConstraints(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data);
-	void print(IloCplex, IloIntVarArray, IloRangeArray);
+	void print(IloCplex cplex, IloIntVarArray x, IloRangeArray con, Data& data);
 };
 
 #endif TWO_INDEX_H_

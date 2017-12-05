@@ -3,7 +3,8 @@
 #include "Data.h"
 #include "Vertex.h"
 #include "Edge.h"
-#include "Parameters.h"
+
+#include <ilcplex/ilocplex.h>
 
 #define EPS 1e-7
 

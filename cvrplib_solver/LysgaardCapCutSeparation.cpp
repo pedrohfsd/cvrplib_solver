@@ -20,7 +20,7 @@ LysgaardCapCutSeparation::LysgaardCapCutSeparation(Data& data):LysgaardCutSepara
 
 bool LysgaardCapCutSeparation::run(const vector<double>& solution)
 {
-	init(solution); // builds solution adjacency matrix, tail, head and x vectors.
+	init(solution);
 
 	char IntegerAndFeasible;
 	double MaxViolation;
@@ -32,13 +32,12 @@ bool LysgaardCapCutSeparation::run(const vector<double>& solution)
 	{
 		int error = 0;
 		double bestViolation = 0.0;
-		for (int i = 0; i < MyCutsCMP->Size; i++) // for each connected component
+		for (int i = 0; i < MyCutsCMP->Size; i++)
 		{
 			CapacityCut cut;
-
 			int S = MyCutsCMP->CPL[i]->IntListSize;
 			int demand = 0;
-			for (int j = 1; j <= MyCutsCMP->CPL[i]->IntListSize; j++)
+			for (int j = 1; j <= MyCutsCMP->CPL[i]->IntListSize; j++) {
 				if (MyCutsCMP->CPL[i]->IntList[j] == data.vertices.size())
 				{
 					cout << "Lysgaard CapCut Separation Error: depot is in the cut!" << endl;
@@ -49,22 +48,15 @@ bool LysgaardCapCutSeparation::run(const vector<double>& solution)
 					cut.vertices.push_back(MyCutsCMP->CPL[i]->IntList[j]);
 					demand += data.vertices[MyCutsCMP->CPL[i]->IntList[j]].demand;
 				}
+			}
 
 			cut.ks = (int)ceil(demand / (double)data.vehicle_capacity - 1e-7); // minimum number of vehicles
+			cut.sense = Cut::lower_equal;
+			cut.rhs = S - cut.ks;
 
-			if (S <= (int)data.vertices.size() / 2) // is sufficently small, use this cut
-			{
-				cuts.push_back(Cut(S - cut.ks, Cut::lower_equal));
-				//addCutEdges(cuts.back(), cut.vertices_map, inner_edge, 1.0);
-			}
-			else // too big, use the complementary cut
-			{
-				cuts.push_back(Cut((int)data.vertices.size() - 1 - S - cut.ks, Cut::lower_equal));
-				/*addCutEdges(cuts.back(), cut.vertices_map, outer_edge, 1.0);
-				addCutEdges(cuts.back(), cut.vertices_map, outer_depot_edge, 0.5);
-				addCutEdges(cuts.back(), cut.vertices_map, inner_depot_edge, -0.5);*/
-			}
+			addCutEdges(cut);
 
+			cuts.push_back(cut);
 			/*double violation = calculateViolation(cuts.back(), solution);
 			if (violation <= EPS)
 				error++;

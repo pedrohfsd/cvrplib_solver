@@ -8,10 +8,12 @@ class AbstractCutSeparation {
 public:
 	AbstractCutSeparation(Data& data);
 	//~AbstractCutSeparation();
-public:
+	Cut getCut();
+protected:
 	Data& data;
 	int best;
 	std::vector<Cut> cuts;
+	void addCutEdges(Cut& cut);
 };
 
 #endif //ABSTRACTCUTSEPARATION_H

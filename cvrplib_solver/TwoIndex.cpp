@@ -15,7 +15,6 @@ void TwoIndex::run(Data& data) {
 	IloModel model(env, PROBLEM.c_str());
 	IloIntVarArray x(env);
 	IloRangeArray cons(env);
-	LysgaardSeparationCallback callback(env, x, data);
 
 	addDecisionVariables(model, x, cons, data);
 	addObjectiveFunction(model, x, cons, data);
@@ -26,11 +25,17 @@ void TwoIndex::run(Data& data) {
 	IloCplex cplex(model);
 	cplex.exportModel((PROBLEM + ".lp").c_str());
 	cplex.setParam(IloCplex::Threads, 1);
-	cplex.use(&callback);
+	cplex.use(new LysgaardSeparationCallback(env, x, data));
 
-	if (!cplex.solve()) throw exception("Failed to optimize IP");
+	if (!cplex.solve()) {
+#ifdef _DEBUG
+		return;
+#else
+		throw exception("Failed to optimize IP");
+#endif
+	}
 
-	print(cplex, x, cons);
+	print(cplex, x, cons, data);
 }
 
 void TwoIndex::addDecisionVariables(IloModel model, IloIntVarArray x, IloRangeArray con, Data& data) {
@@ -74,16 +79,37 @@ void TwoIndex::addObjectiveFunction(IloModel model, IloIntVarArray x, IloRangeAr
 	expr.end();
 };
 
-void TwoIndex::print(IloCplex cplex, IloIntVarArray x, IloRangeArray cons) {
+void TwoIndex::print(IloCplex cplex, IloIntVarArray x, IloRangeArray cons, Data& data) {
 	IloEnv env = cplex.getEnv();
 	IloNumArray vals(env);
 
 	env.out() << "Solution status = " << cplex.getStatus() << endl;
 	env.out() << "Solution value  = " << cplex.getObjValue() << endl;
 	cplex.getValues(vals, x);
-	env.out() << "Values        = " << vals << endl;
+
+	vector<vector<double>> adj;
+	adj.resize(data.vertices.size());
+	for (int i = 0; i < data.vertices.size(); i++) adj[i].resize(data.vertices.size());
+	int pos = 0;
+	for (int i = 0; i < data.vertices.size(); i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			adj[i][j] = vals[pos++];
+		}
+	}
+	cout << "solution matrix:" << endl;
+	for (int i = 0; i < data.vertices.size(); i++)
+	{
+		for (int j = 0; j < data.vertices.size(); j++)
+		{
+			cout << adj[i][j] << ",";
+		}
+		cout << endl;
+	}
+	/*env.out() << "Values        = " << vals << endl;
 	cplex.getSlacks(vals, cons);
-	env.out() << "Slacks        = " << vals << endl;
+	env.out() << "Slacks        = " << vals << endl;*/
 	/*cplex.getDuals(vals, con);
 	env.out() << "Duals         = " << vals << endl;
 	cplex.getReducedCosts(vals, var);

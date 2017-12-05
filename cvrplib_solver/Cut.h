@@ -6,9 +6,6 @@
 class Cut
 {
 public:
-	Cut();
-	Cut(int rhs, int sense);
-
 	enum Sense
 	{
 		greater_equal,
@@ -16,7 +13,12 @@ public:
 		lower_equal,
 	};
 
+	Cut();
+	Cut(double rhs, Sense sense);
+
+
 	std::vector<std::pair<int, double>> coeff;
+	std::vector<int> vertices;
 	Sense sense;
 	double rhs;
 };
