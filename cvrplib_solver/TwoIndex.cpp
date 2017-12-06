@@ -25,7 +25,8 @@ void TwoIndex::run(Data& data) {
 	IloCplex cplex(model);
 	cplex.exportModel((PROBLEM + ".lp").c_str());
 	cplex.setParam(IloCplex::Threads, 1);
-	cplex.use(new LysgaardSeparationCallback(env, x, data));
+	cplex.use(new LysgaardSeparationCallback<IloCplex::LazyConstraintCallbackI>(env, x, data));
+	cplex.use(new LysgaardSeparationCallback<IloCplex::UserCutCallbackI>(env, x, data));
 
 	if (!cplex.solve()) {
 #ifdef _DEBUG

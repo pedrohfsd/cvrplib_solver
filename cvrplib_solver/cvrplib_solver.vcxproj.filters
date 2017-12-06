@@ -54,9 +54,6 @@
     <ClCompile Include="TwoIndex.cpp">
       <Filter>Source Files\solver</Filter>
     </ClCompile>
-    <ClCompile Include="LysgaardSeparationCallback.cpp">
-      <Filter>Source Files\solver\lysgaard</Filter>
-    </ClCompile>
     <ClCompile Include="LysgaardCutSeparation.cpp">
       <Filter>Source Files\solver\lysgaard</Filter>
     </ClCompile>

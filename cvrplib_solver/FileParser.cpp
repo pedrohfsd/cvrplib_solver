@@ -28,10 +28,10 @@ void FileParser::parse(const string& filepath) {
 		readLowDiagEdges2D(infile, true);
 	} else if (spec["EDGE_WEIGHT_FORMAT"] == "LOWER_ROW") {
 		readLowDiagEdges2D(infile, false);
-	}else throw exception("Unsupported edge data format");
+	} else throw exception("Unsupported edge data format");
 	
 	readDemands(infile);
-};
+}
 
 int FileParser::attDistance(double node1[2], double node2[2]) {
 	double x[2] = { node1[0], node2[0] };
@@ -42,7 +42,7 @@ int FileParser::attDistance(double node1[2], double node2[2]) {
 	int tij = nint(rij);
 	if (tij < rij) return tij + 1;
 	return tij;
-};
+}
 
 void FileParser::buildDataFromCoord(function<int(double[], double[])> dist) {
 	int pos = 0;
@@ -60,7 +60,7 @@ void FileParser::buildDataFromCoord(function<int(double[], double[])> dist) {
 			to.edges.push_back(edge);
 		}
 	}
-};
+}
 
 int FileParser::euclidianDistance2D(double node1[2], double node2[2]) {
 	double x[2] = { node1[0], node2[0] };
@@ -68,7 +68,7 @@ int FileParser::euclidianDistance2D(double node1[2], double node2[2]) {
 	double xd = x[0] - x[1];
 	double yd = y[0] - y[1];
 	return nint(sqrt(xd*xd + yd*yd));
-};
+}
 
 int FileParser::geoDistance(double node1[2], double node2[2]) {
 	double x[2] = { node1[0], node2[0] };
@@ -96,11 +96,11 @@ int FileParser::geoDistance(double node1[2], double node2[2]) {
 	double q2 = cos(latitude[0] - latitude[1]);
 	double q3 = cos(latitude[0] + latitude[1]);
 	return (int)(RRR * acos(0.5*((1.0 + q1)*q2 - (1.0 - q1)*q3)) + 1.0);
-};
+}
 
 int FileParser::nint(double x) {
 	return (int)(x + 0.5);
-};
+}
 
 void FileParser::readDemands(ifstream& infile) {
 	string line;
@@ -129,18 +129,19 @@ void FileParser::readLowDiagEdges2D(ifstream& infile, bool includeDiagonal) {
 			to.edges.push_back(edge);
 		}
 	}
-};
+}
 
 void FileParser::readNodes2D(ifstream& infile) {
 	string line;
-	while (getline(infile, line)) {
-		istringstream iss(line);
-		int v; double x, y;
-		if (!(iss >> v >> x >> y)) break;
+	for (int i = 0; i < (int)data.vertices.size(); i++)
+	{
+		int v;
+		double x, y;
+		infile >> v >> x >> y;
 		data.vertices[v - 1].coordinate[0] = x;
 		data.vertices[v - 1].coordinate[1] = y;
 	}
-};
+}
 
 void FileParser::readSpecification(ifstream& infile, unordered_map<string, string>& spec) {
 	string line;
@@ -154,4 +155,4 @@ void FileParser::readSpecification(ifstream& infile, unordered_map<string, strin
 		spec[key] = value;
 	}
 	spec[line] = "true";
-};
+}

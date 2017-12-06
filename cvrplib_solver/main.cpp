@@ -25,9 +25,9 @@ int main(int argc, const char* argv[]) {
 
 		Data data;
 		FileParser fileParser(data);
-		fileParser.parse("..\\..\\res\\E-n13-k4.vrp");
-		data.vehicle_capacity = 6000;
-		data.vehicles = 4;
+		fileParser.parse(string(argv[1]));
+		data.vehicle_capacity = 100;
+		data.vehicles = 5;
 		data.depot = 0;
 
 		TwoIndex().run(data);
